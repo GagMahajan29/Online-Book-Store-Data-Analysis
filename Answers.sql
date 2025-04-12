@@ -53,17 +53,17 @@ select SUM(Total_Amount) [Total Revenue] from Orders    --75628.66
 -- 12) Retrieve the total number of books sold for each genre:
 
 select Genre,SUM(Quantity) [Quantity sold for each genre] 
-from Books b JOIN Orders o on b.Book_ID=o.Book_ID
-Group by Genre
+from Books b join Orders o on b.Book_ID=o.Book_ID
+group by Genre
 
 -- 13) Find the average price of books in the "Fantasy" genre:
 
-select AVG(Price) [Avg price for fantasy genre] from Books where Genre='Fantasy'  --25.98
+select AVG(Price) [Avg price for fantasy genre] from Books where Genre='Fantasy'  
 
 -- 14) List customers who have placed at least 2 orders:
 
 select Name,COUNT(Order_ID) [No. of orders]
-from Customers c Join Orders o on c.Customer_ID=o.Customer_ID
+from Customers c join Orders o on c.Customer_ID=o.Customer_ID
 group by Name
 having COUNT(Order_ID)>=2
 
@@ -88,24 +88,24 @@ order by SUM(Quantity) desc
 
 -- 18) List the cities where customers who spent over $30 are located:
 
-SELECT DISTINCT c.city, total_amount
-FROM orders o
-JOIN customers c ON o.customer_id=c.customer_id
-WHERE o.total_amount > 30
+select c.city, total_amount
+from orders o
+join customers c on o.customer_id=c.customer_id
+where o.total_amount > 30
 
 -- 19) Find the customer who spent the most on orders:
 
-SELECT top 1 c.customer_id, c.name, SUM(o.total_amount) AS Total_Spent
-FROM orders o
-JOIN customers c ON o.customer_id=c.customer_id
-GROUP BY c.customer_id, c.name
-ORDER BY Total_spent Desc
+select top 1 c.customer_id, c.name, SUM(o.total_amount) [Total_Spent]
+from orders o
+join customers c on o.customer_id=c.customer_id
+group by c.customer_id, c.name
+order by Total_spent Desc
 
 -- 20) Calculate the stock remaining after fulfilling all orders:
 
-SELECT b.book_id, b.title, b.stock, COALESCE(SUM(o.quantity),0) AS Order_quantity,  
-	b.stock- COALESCE(SUM(o.quantity),0) AS Remaining_Quantity
-FROM books b
-LEFT JOIN orders o ON b.book_id=o.book_id
-GROUP BY b.book_id ,b.Title,b.Stock
-ORDER BY b.book_id
+select b.book_id, b.title, b.stock, COALESCE(SUM(o.quantity),0) as Order_quantity,  
+	b.stock- COALESCE(SUM(o.quantity),0) as Remaining_Quantity
+from books b
+left join orders o on b.book_id=o.book_id
+group by b.book_id ,b.Title,b.Stock
+order by b.book_id
